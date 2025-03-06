@@ -1,5 +1,5 @@
 # Docker file nodejs azure app services
-FROM node:12latest
+FROM node:latest
 # Create app directory
 WORKDIR /app
 # Install app dependencies
