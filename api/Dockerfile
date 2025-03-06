@@ -1,5 +1,5 @@
 # Docker file nodejs azure app services
-FROM node:latest
+FROM alpine:3.20
 # Create app directory
 WORKDIR /app
 # Install app dependencies
