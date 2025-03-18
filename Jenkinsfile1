@@ -1,0 +1,26 @@
+pipeline {
+    agent any
+    
+    stages {
+        stage('Git Hub') {
+            steps {
+                
+                git branch: 'Dev', changelog: false, poll: false, url: 'https://github.com/Jayanthpodila12/lms.git'
+            }
+        }
+        stage('Build') {
+            steps {
+                echo 'Building..'
+                sh 'cd webapp && sudo docker build -t mywebapp .'
+                sh 'sudo docker container run -dt --name c2 -p 8083:80 mywebapp'
+            }
+        }
+        stage('Test') {
+            steps {
+                echo 'Testing..'
+                sh 'cd webapp && sudo docker run --rm -e SONAR_HOST_URL="http://13.52.218.229:9000/" -v ".:/usr/src" -e SONAR_TOKEN="squ_16f73d841b3efe5300ec60af2b9595f69afbf5d9" sonarsource/sonar-scanner-cli -Dsonar.projectKey=lms'
+            }
+        }
+        
+    }
+}
