@@ -11,8 +11,17 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building..'
-                sh 'cd webapp && sudo docker build -t mywebapp .'
-                sh 'sudo docker container run -dt --name c2 -p 8083:80 mywebapp'
+                sh 'cd webapp && sudo docker build -t mywebapp1:v2 .'
+                sh 'sudo docker container run -dt --name c2 -p 8084:80 mywebapp1:v2'
+            }
+        }
+         stage('docker login') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'cend', usernameVariable: 'usr')]) {
+                   sh 'sudo docker login -u ${usr} -p ${cend}' 
+                   sh 'sudo docker tag mywebapp1:v2 jayanthpodila/lms-repo:v2'
+                   sh 'sudo docker push jayanthpodila/lms-repo:v2'  
+               }
             }
         }
         stage('Test') {
