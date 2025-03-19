@@ -12,7 +12,7 @@ pipeline {
             steps {
                 echo 'Building..'
                 sh 'cd webapp && sudo docker build -t mywebapp1:v2 .'
-                sh 'sudo docker container run -dt --name c2 -p 8084:80 mywebapp1:v2'
+                sh 'sudo docker container run -dt --name c2 -p 8082:80 mywebapp1:v2'
             }
         }
          stage('docker login') {
@@ -27,7 +27,8 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'Testing..'
-                sh 'cd webapp && sudo docker run --rm -e SONAR_HOST_URL="http://13.52.218.229:9000/" -v ".:/usr/src" -e SONAR_TOKEN="squ_16f73d841b3efe5300ec60af2b9595f69afbf5d9" sonarsource/sonar-scanner-cli -Dsonar.projectKey=lms'
+                sh 'cd webapp && sudo docker run --rm -e SONAR_HOST_URL="http:/54.183.229.99:9000/" -v ".:/usr/src" -e SONAR_TOKEN="squ_161621c87e5fb758e37552fa7f9cab0d3af5c7a2" sonarsource/sonar-scanner-cli -Dsonar.projectKey=lms-qa'
+
             }
         }
         
