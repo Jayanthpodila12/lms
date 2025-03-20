@@ -25,8 +25,8 @@ pipeline {
         stage('Build API') {
             steps {
                 echo 'Building backend.'
-                sh 'cd api && sudo docker build -t myapi:v1 .'
-                sh 'sudo docker container run -dt --name backend -p 8081:80 myapi:v1'
+                sh 'cd api && sudo docker build -t myapi:v2 .'
+                sh 'sudo docker container run -dt --name backend -p 8081:80 myapi:v2'
             }
         }  
         stage('Build Webapp') {
