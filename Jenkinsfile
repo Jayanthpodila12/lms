@@ -18,7 +18,7 @@ pipeline {
         stage('DB') {
             steps {
                 echo 'Database..'
-                sh 'sudo docker container run -dt --name lms-db -e POSTGRES_PASSWORD=lms123 postgres'
+                sh 'sudo docker container run -dt --name lms-db1 -e POSTGRES_PASSWORD=lms123 postgres'
 
             }
         }
