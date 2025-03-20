@@ -1,31 +1,52 @@
 pipeline {
     agent any
-    environment {
-        // More detail: 
-        // https://jenkins.io/doc/book/pipeline/jenkinsfile/#usernames-and-passwords
-        NEXUS_CRED = credentials('nexus')
-   }
-
+    
     stages {
-        stage('Build') {
+        stage('Git Hub') {
             steps {
-                echo 'Building..'
-                sh 'cd webapp && npm install && npm run build'
+                
+                git branch: 'Dev', changelog: false, poll: false, url: 'https://github.com/Jayanthpodila12/lms.git'
             }
         }
         stage('Test') {
             steps {
                 echo 'Testing..'
-                sh 'cd webapp && sudo docker container run --rm -e SONAR_HOST_URL="http://20.172.187.108:9000" -e SONAR_LOGIN="sqp_cae41e62e13793ff17d58483fb6fb82602fe2b48" -v ".:/usr/src" sonarsource/sonar-scanner-cli -Dsonar.projectKey=lms'
+                sh 'cd api && sudo docker run --rm -e SONAR_HOST_URL="http:/54.151.100.229:9000/" -v ".:/usr/src" -e SONAR_TOKEN="squ_997b5e890b817be4a96636112247e9d87334d78f" sonarsource/sonar-scanner-cli -Dsonar.projectKey=lms-demo'
+                sh 'cd webapp && sudo docker run --rm -e SONAR_HOST_URL="http:/54.151.100.229:9000/" -v ".:/usr/src" -e SONAR_TOKEN="squ_997b5e890b817be4a96636112247e9d87334d78f" sonarsource/sonar-scanner-cli -Dsonar.projectKey=lms-demo'
             }
-        }
-        stage('Release') {
+        } 
+        stage('DB') {
             steps {
-                echo 'Release Nexus'
-                sh 'rm -rf *.zip'
-                sh 'cd webapp && zip dist-${BUILD_NUMBER}.zip -r dist'
-                sh 'cd webapp && curl -v -u $Username:$Password --upload-file dist-${BUILD_NUMBER}.zip http://20.172.187.108:8081/repository/lms/'
+                echo 'Database..'
+                sh 'sudo docker container run -dt --name lms-db -e POSTGRES_PASSWORD=lms123 postgres'
+
             }
         }
-    }
+        stage('Build API') {
+            steps {
+                echo 'Building backend.'
+                sh 'cd api && sudo docker build -t myapi:v1 .'
+                sh 'sudo docker container run -dt --name backend -p 8081:80 myapi:v1'
+            }
+        }  
+        stage('Build Webapp') {
+            steps {
+                echo 'Building frontend.'
+                sh 'cd webapp && sudo docker build -t mywebapp1:v3 .'
+                sh 'sudo docker container run -dt --name frontend -p 80:80 mywebapp1:v3'
+            }
+        }  
+        stage('docker login') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'cend', usernameVariable: 'usr')]) {
+                   sh 'sudo docker login -u ${usr} -p ${cend}' 
+                   sh 'sudo docker tag myapi:v1 jayanthpodila/lms-repo:v1'
+                   sh 'sudo docker push jayanthpodila/lms-repo:v1'  
+               }
+            }      
+                         
+   }
+ }
 }
+
+
