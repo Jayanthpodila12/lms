@@ -22,29 +22,32 @@ pipeline {
 
             }
         }
+        stage('docker login') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'cend', usernameVariable: 'usr')]) {
+                   sh 'sudo docker login -u ${usr} -p ${cend}' 
+                   
+               }
+            }
+        }
         stage('Build API') {
             steps {
                 echo 'Building backend.'
-                sh 'cd api && sudo docker build -t myapi:v2 .'
-                sh 'sudo docker container run -dt --name backend -p 8081:80 myapi:v2'
+                sh 'cd api && sudo docker build -t jayanthpodila/lms-be:v1 .'
+                sh 'sudo docker container run -dt --name backend -p 8081:8080 jayanthpodila/lms-be:v1'
+                sh 'sudo docker push jayanthpodila/lms-be:v1'
             }
         }  
         stage('Build Webapp') {
             steps {
                 echo 'Building frontend.'
-                sh 'cd webapp && sudo docker build -t mywebapp1:v3 .'
-                sh 'sudo docker container run -dt --name frontend -p 80:80 mywebapp1:v3'
+                sh 'cd webapp && sudo docker build -t jayanthpodila/lms-fe:v1 .'
+                sh 'sudo docker container run -dt --name frontend -p 80:80 jayanthpodila/lms-fe:v1'
+                sh 'sudo docker push jayanthpodila/lms-fe:v1'
             }
         }  
-        stage('docker login') {
-            steps {
-                withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'cend', usernameVariable: 'usr')]) {
-                   sh 'sudo docker login -u ${usr} -p ${cend}' 
-                   sh 'sudo docker tag myapi:v1 jayanthpodila/lms-repo:v1'
-                   sh 'sudo docker push jayanthpodila/lms-repo:v1'  
-               }
-            }      
+              
                          
-   }
+   
  }
 }
