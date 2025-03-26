@@ -22,8 +22,8 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: REGISTRY_CREDENTIALS, usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                         sh """
                         echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
-                        docker build -t jayanthpodila/lms-fe:${APP_VERSION} webapp/
-                        docker push jayanthpodila/lms-fe:${APP_VERSION}
+                        sudo docker build -t jayanthpodila/lms-fe:${APP_VERSION} webapp/
+                        sudo docker push jayanthpodila/lms-fe:${APP_VERSION}
                         """
                     }
                 }
