@@ -34,7 +34,7 @@ pipeline {
                 withCredentials([
                     [$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'AWS Credentials']]) {
                     sh '''
-                        aws lms update-kubeconfig --region $AWS_REGION --name lms
+                        aws eks update-kubeconfig --region $AWS_REGION --name lms
                     '''
                 }
             }
