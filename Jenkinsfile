@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         REGISTRY_CREDENTIALS = "dockerhub"
-        AWS_CREDENTIALS = 'AWS Credentials'
+        AWS_CREDENTIALS = 'awscredentials'
         AWS_REGION = "us-east-1"
         KUBECONFIG_CREDENTIALS = 'kubeconfig'
     }
@@ -32,7 +32,7 @@ pipeline {
        stage('Authenticate with AWS and EKS') {
             steps {
                 withCredentials([
-                    [$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'AWS Credentials']]) {
+                    [$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'awscredentials']]) {
                     sh '''
                         aws eks update-kubeconfig --region $AWS_REGION --name lms
                     '''
