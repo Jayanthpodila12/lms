@@ -112,7 +112,7 @@ kind: Deployment
 metadata:
   name: lms-fe
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: lms-fe
