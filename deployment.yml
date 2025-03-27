@@ -3,9 +3,7 @@ kind: Secret
 metadata:
   name: postgres-secret
 data:
-  POSTGRES_USER: bG1zMTIz
-  PASSWORD: cGFzc3dvcmQ=
-  POSTGRES_DB: cG9zdGdyZXNfZGI=
+  Password: cGFzc3dvcmQ=
 
 ---
 
