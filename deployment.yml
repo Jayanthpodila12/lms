@@ -5,7 +5,6 @@ metadata:
 data:
   Password: cGFzc3dvcmQ=
 
----
 
 apiVersion: apps/v1
 kind: Deployment
@@ -33,7 +32,6 @@ spec:
                   name: postgres-secret
                   key: PASSWORD
 
----
 
 apiVersion: v1
 kind: Service
@@ -46,7 +44,7 @@ spec:
   ports:
     - port: 5432
 
----
+
 
 apiVersion: v1
 kind: ConfigMap
@@ -60,7 +58,7 @@ data:
   PORT: "3000"
   MODE: production
 
----
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -91,7 +89,7 @@ spec:
                   name: postgres-secret
                   key: PASSWORD
 
----
+
 apiVersion: v1
 kind: Service
 metadata:
@@ -103,7 +101,7 @@ spec:
   selector:
     app: lms-be
 
----
+
 
 apiVersion: apps/v1
 kind: Deployment
@@ -126,7 +124,7 @@ spec:
           ports:
             - containerPort: 80
 
----
+
 
 apiVersion: v1
 kind: Service
