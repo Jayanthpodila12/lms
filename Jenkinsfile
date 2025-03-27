@@ -50,7 +50,8 @@ pipeline {
                         export KUBECONFIG=$KUBECONFIG_CREDENTIALS
                         echo "Using KUBECONFIG: \$KUBECONFIG_CREDENTIALS"
                         sed -i "s|IMAGE_VERSION|${APP_VERSION}|g" deployment.yml
-                        kubectl apply -f deployment.yml --validate=false
+                        
+                        kubectl apply -f deployment.yml --validate=false --insecure-skip-tls-verify
                     '''
                 }
             }
