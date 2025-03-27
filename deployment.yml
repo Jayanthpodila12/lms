@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: frontend-container
-          image: jayanthpodila/lms
+          image: jayanthpodila/lms:1.0.1
           imagePullPolicy: Always
           ports:
             - containerPort: 80
