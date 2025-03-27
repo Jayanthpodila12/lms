@@ -25,6 +25,7 @@ pipeline {
                         cd api
                         sudo docker build -t jayanthpodila/lms-be .
                         sudo docker push jayanthpodila/lms-be
+                        cd webapp
                         sudo docker build -t jayanthpodila/lms-fe:${APP_VERSION}webapp/
                         sudo docker push jayanthpodila/lms-fe:${APP_VERSION}
                         """
