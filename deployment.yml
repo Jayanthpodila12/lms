@@ -3,8 +3,11 @@ kind: Secret
 metadata:
   name: postgres-secret
 data:
-  password: bG1zMTIz
+  POSTGRES_USER: bG1zMTIz
+  PASSWORD: cGFzc3dvcmQ=
+  POSTGRES_DB: cG9zdGdyZXNfZGI=
 
+---
 
 apiVersion: apps/v1
 kind: Deployment
@@ -30,8 +33,9 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: postgres-secret
-                  key: password
+                  key: PASSWORD
 
+---
 
 apiVersion: v1
 kind: Service
@@ -44,6 +48,7 @@ spec:
   ports:
     - port: 5432
 
+---
 
 apiVersion: v1
 kind: ConfigMap
@@ -56,8 +61,8 @@ data:
   DB_NAME: postgres
   PORT: "3000"
   MODE: production
-  
 
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -86,9 +91,9 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: postgres-secret
-                  key: password
+                  key: PASSWORD
 
-
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -100,6 +105,7 @@ spec:
   selector:
     app: lms-be
 
+---
 
 apiVersion: apps/v1
 kind: Deployment
@@ -122,6 +128,7 @@ spec:
           ports:
             - containerPort: 80
 
+---
 
 apiVersion: v1
 kind: Service
